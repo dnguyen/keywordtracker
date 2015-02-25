@@ -1,4 +1,5 @@
 var Config = {
+    keywords: [],
     twitter: {
         consumerKey: '',
         consumerSecret: '',

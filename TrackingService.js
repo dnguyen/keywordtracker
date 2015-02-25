@@ -5,9 +5,6 @@ var request = require('request'),
     RSSSource = require('./RSSSource.js'),
     DataStore = require('./DataStore.js');
 var TwitterSource = require('./TwitterSource');
-var feedparser = new FeedParser();
-var keywords = ['Google', 'Silicon Valley', 'Microsoft'];
-var sources = [];
 
 var TrackingService = function() {
 
@@ -19,14 +16,19 @@ TrackingService.prototype.start = function() {
     //     feed: 'http://feeds.feedburner.com/TechCrunch/',
     //     keywords: keywords
     // });
-    // rssSource.parse();
     // var vergeSource = new RSSSource({
     //     feed: 'http://www.theverge.com/rss/index.xml',
     //     keywords: keywords
     // });
-    // vergeSource.parse();
     var twitterSource = new TwitterSource();
-    twitterSource.parse();
+    setInterval(function() {
+        console.log('\n\n[BEGIN PARSING]\n\n');
+        DataStore.total = 0;
+        // vergeSource.parse();
+        // rssSource.parse();
+        twitterSource.parse();
+        DataStore.lastTotal = DataStore.total;
+    }, 1000*60);
 };
 
 module.exports = TrackingService;

@@ -8,11 +8,11 @@ var RSSSource = function(options) {
     if (!options.feed) console.log('Invalid feed');
     this.feed = options.feed;
     this.keywords = options.keywords;
-    this.feedParser = new FeedParser();
 };
 
 RSSSource.prototype.parse = function() {
 
+    this.feedParser = new FeedParser();
     var req = request(this.feed),
         self = this,
         relevanceCount = 0;
@@ -42,6 +42,11 @@ RSSSource.prototype.parse = function() {
             });
         }
         //console.log(DataStore.keywordRelevance);
+    });
+
+    self.feedParser.on('error', function(error) {
+        console.log('FEED ERROR');
+        console.log(error);
     });
 };
 

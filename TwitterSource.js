@@ -14,22 +14,31 @@ var TwitterSource = function(options) {
 };
 
 TwitterSource.prototype.parse = function() {
-    var searchQuery = '"' + config.keywords[0] + '"';
-    _.each(config.keywords, function(word) {
-        searchQuery += ' OR "' + word + '"';
-    });
+    var searchQuery = '';
+    for (var i = 0; i < config.keywords.length; i++) {
+        searchQuery += '"' + config.keywords[i] + '"';
+        if (i < config.keywords.length - 1) {
+            searchQuery += ' OR ';
+        }
+    }
+    console.log(searchQuery);
     console.log('Searching search/tweets ' + encodeURI(searchQuery));
-    this.twit.get('search/tweets', { q: encodeURI(searchQuery), lang: 'en', count: 25 }, function(err, data, response) {
-        _.each(data.statuses, function(tweet) {
-            console.log(tweet.text);
-            _.each(config.keywords, function(word) {
-                if (tweet.text.indexOf(word) > -1 || tweet.text.indexOf(word.toLowerCase()) > -1) {
-                    console.log(tweet.text);
-                    DataStore.increment(word, 1);
-                    DataStore.addHit(word, { from: tweet.id, title: tweet.text, type: 'tweet' });
-                }
+    this.twit.get('search/tweets', { q: encodeURI(searchQuery), lang: 'en', count: 100 }, function(err, data, response) {
+        if (err) {
+            console.log('error with loading tweets');
+            console.log(err);
+        } else {
+            _.each(data.statuses, function(tweet) {
+                console.log(tweet.text);
+                _.each(config.keywords, function(word) {
+                    if (tweet.text.indexOf(word) > -1 || tweet.text.indexOf(word.toLowerCase()) > -1) {
+                        console.log(tweet.text);
+                        DataStore.increment(word, 1);
+                        DataStore.addHit(word, { from: tweet.id, title: tweet.text, type: 'tweet' });
+                    }
+                });
             });
-        });
+        }
     });
 };
 
