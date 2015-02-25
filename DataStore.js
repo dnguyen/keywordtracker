@@ -38,7 +38,8 @@ var DataStore = {
                         word: word,
                         type: data.type,
                         from: data.from,
-                        contents: data.title
+                        contents: data.title,
+                        date:  data.date
                     }
                 ], function(err, result) {
                     if (err) console.log('err when inserting');

@@ -24,7 +24,9 @@ RSSSource.prototype.parse = function() {
 
         stream.pipe(self.feedParser);
     });
-
+    req.on('error', function(res) {
+        console.log('error with reqeust');
+    });
     // Start reading feed
     self.feedParser.on('readable', function() {
         var stream = this,
@@ -37,7 +39,12 @@ RSSSource.prototype.parse = function() {
                 if (item.title.indexOf(word) > -1 || item.title.toLowerCase().indexOf(word) > -1) {
                     console.log(item.title);
                     DataStore.increment(word, 1);
-                    DataStore.addHit(word, { from: item.link, title: item.title, type: 'RSS' });
+                    DataStore.addHit(word, {
+                        from: item.link,
+                        title: item.title,
+                        type: 'RSS',
+                        date: moment(item.pubdate).toDate()
+                    });
                 }
             });
         }
