@@ -6,6 +6,7 @@ var request = require('request'),
     DataStore = require('./DataStore.js'),
     config = require('./config.js');
 var TwitterSource = require('./TwitterSource');
+var TwitterUserTimelineSource = require('./TwitterUserTimelineSource.js');
 
 var TrackingService = function() {
 
@@ -26,14 +27,16 @@ TrackingService.prototype.start = function() {
     //     keywords: config.keywords
     // });
     var twitterSource = new TwitterSource();
-    setInterval(function() {
+    var twitterUserSource = new TwitterUserTimelineSource({screenName: 'allkpop'});
+    //setInterval(function() {
         console.log('\n\n[BEGIN PARSING]\n\n');
         DataStore.total = 0;
         // vergeSource.parse();
         // rssSource.parse();
         //twitterSource.parse();
+        twitterUserSource.parse();
         DataStore.lastTotal = DataStore.total;
-    }, 1000*60);
+    //}, 1000*60);
 };
 
 module.exports = TrackingService;

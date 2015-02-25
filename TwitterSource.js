@@ -37,7 +37,7 @@ TwitterSource.prototype.parse = function() {
                         console.log(tweet.text);
                         DataStore.increment(word, 1);
                         DataStore.addHit(word, {
-                            from: tweet.id,
+                            from: tweet.id_str,
                             title: tweet.text,
                             type: 'tweet',
                             date: created.toDate()
