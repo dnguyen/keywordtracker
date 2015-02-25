@@ -37,7 +37,7 @@ RSSSource.prototype.parse = function() {
                 if (item.title.indexOf(word) > -1 || item.title.toLowerCase().indexOf(word) > -1) {
                     console.log(item.title);
                     DataStore.increment(word, 1);
-                    DataStore.addHit(word, { from: item.link, title: item.title });
+                    DataStore.addHit(word, { from: item.link, title: item.title, type: 'RSS' });
                 }
             });
         }

@@ -35,6 +35,7 @@ var DataStore = {
                     {
                         hash: hash,
                         word: word,
+                        type: data.type,
                         from: data.from,
                         contents: data.title
                     }
