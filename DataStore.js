@@ -2,6 +2,7 @@
 var crypto = require('crypto');
 
 var DataStore = {
+    // Keep track of counts in memory
     keywordRelevance: {},
     lastTotal: 0,
     total: 0,
@@ -17,6 +18,7 @@ var DataStore = {
     },
 
     addHit: function(word, data) {
+        var self = this;
         console.log('[ADDING HIT] \n\t' + data.from);
         var hash = crypto.createHash('md5').update(data.from + word).digest('hex');
         console.log('\thash: ' + hash);
@@ -31,9 +33,10 @@ var DataStore = {
                 // Insert into tracker hits
                 trackerHits.insert([
                     {
+                        hash: hash,
                         word: word,
-                        hash: hash ,
-                        from: data.from
+                        from: data.from,
+                        contents: data.title
                     }
                 ], function(err, result) {
                     if (err) console.log('err when inserting');
@@ -41,7 +44,7 @@ var DataStore = {
                 });
 
                 // Increment count in keywords
-                var keywords = this.db.collection('keywords');
+                var keywords = self.db.collection('keywords');
                 keywords.update(
                     { word: word },
                     {

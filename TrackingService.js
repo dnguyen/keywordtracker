@@ -6,7 +6,7 @@ var request = require('request'),
     DataStore = require('./DataStore.js');
 
 var feedparser = new FeedParser();
-var keywords = ['Google', 'Silicon Valley', 'Plex'];
+var keywords = ['Google', 'Silicon Valley', 'Microsoft'];
 var sources = [];
 
 var TrackingService = function() {
@@ -20,6 +20,11 @@ TrackingService.prototype.start = function() {
         keywords: keywords
     });
     rssSource.parse();
+    var vergeSource = new RSSSource({
+        feed: 'http://www.theverge.com/rss/index.xml',
+        keywords: keywords
+    });
+    vergeSource.parse();
 };
 
 module.exports = TrackingService;

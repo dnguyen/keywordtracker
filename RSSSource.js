@@ -34,11 +34,10 @@ RSSSource.prototype.parse = function() {
         // Find any posts that contain our keywords
         while (item = stream.read()) {
             _.each(self.keywords, function(word) {
-                if (item.title.indexOf(word) > -1) {
+                if (item.title.indexOf(word) > -1 || item.title.toLowerCase().indexOf(word) > -1) {
                     console.log(item.title);
-                    console.log(item.origlink);
                     DataStore.increment(word, 1);
-                    DataStore.addHit(word, { from: item.origlink });
+                    DataStore.addHit(word, { from: item.link, title: item.title });
                 }
             });
         }
