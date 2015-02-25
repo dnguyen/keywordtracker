@@ -3,6 +3,7 @@ var crypto = require('crypto');
 
 var DataStore = {
     keywordRelevance: {},
+    lastTotal: 0,
     total: 0,
 
     increment: function(word, amount) {
@@ -12,6 +13,7 @@ var DataStore = {
 
         this.keywordRelevance[word].count += amount;
         this.total++;
+
     },
 
     addHit: function(word, data) {
@@ -25,6 +27,8 @@ var DataStore = {
         trackerHits.find({ hash: hash }).toArray(function (err, docs) {
             if (docs.length === 0) {
                 console.log('HASH not found in mongo');
+
+                // Insert into tracker hits
                 trackerHits.insert([
                     {
                         word: word,
@@ -35,6 +39,17 @@ var DataStore = {
                     if (err) console.log('err when inserting');
                     console.log('Insert done');
                 });
+
+                // Increment count in keywords
+                var keywords = this.db.collection('keywords');
+                keywords.update(
+                    { word: word },
+                    {
+                        $inc: { count: 1 }
+                    },
+                    function(err, result) {
+                        console.log('increment count for word done');
+                    });
             }
         });
     }
