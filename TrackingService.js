@@ -33,8 +33,8 @@ TrackingService.prototype.start = function() {
         DataStore.total = 0;
         // vergeSource.parse();
         // rssSource.parse();
-        //twitterSource.parse();
-        twitterUserSource.parse();
+        twitterSource.parse();
+        //twitterUserSource.parse();
         DataStore.lastTotal = DataStore.total;
     //}, 1000*60);
 };

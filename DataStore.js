@@ -1,5 +1,6 @@
 
-var crypto = require('crypto');
+var crypto = require('crypto'),
+    $q = require('bluebird');
 
 var DataStore = {
     // Keep track of counts in memory
@@ -28,40 +29,67 @@ var DataStore = {
         // Add it to the database
         trackerHits.find({ hash: hash }).toArray(function (err, docs) {
             if (docs.length === 0) {
-                console.log('HASH not found in mongo');
-
-                // Insert into tracker hits
-                trackerHits.insert([
-                    {
-                        hash: hash,
-                        word: word,
-                        type: data.type,
-                        from: data.from,
-                        contents: data.title,
-                        date:  data.date
-                    }
-                ], function(err, result) {
-                    if (err) console.log('err when inserting');
-                    console.log('Insert tracker hit done');
+                self.insertTrackerHit({
+                    hash: hash,
+                    word: word,
+                    type: data.type,
+                    from: data.from,
+                    contents: data.title,
+                    date:  data.date
+                }).then(function() {
+                    console.log('[INSERT DONE] ' + data.from + ' ' +  data.title);
                 });
 
-                // Increment count in keywords
-                var keywords = self.db.collection('keywords');
-                keywords.update(
-                    { word: word },
-                    {
-                        $inc: { count: 1 }
-                    },
-                    {
-                        upsert: true
-                    },
-                    function(err, result) {
-                        console.log('increment count for word done');
-                    }
-                );
+                self.upsertKeyword(word).then(function() {
+                    console.log('[UPSERT DONE] ' + word);
+                });
 
             }
         });
+    },
+
+    /**
+     * Inserts a tracker hit into the database
+     * @param  {object} [Data fields to set]
+     * @return {promise}
+     */
+    insertTrackerHit: function(data) {
+        var deferred = $q.defer(),
+            trackerHits = this.db.collection('trackerhits');
+
+        trackerHits.insert([
+            data
+        ], function(err, result) {
+            if (err) {
+                deferred.reject(err);
+            } else {
+                deferred.resolve();
+            }
+        });
+
+        return deferred.promise;
+    },
+
+    /**
+     * Updates keyword count in database.
+     * If the keyword doesn't exist yet in the database, insert it.
+     * @param  {string} word [Word to update]
+     * @return {promise}
+     */
+    upsertKeyword: function(word) {
+        var deferred = $q.defer(),
+            keywords = this.db.collection('keywords');
+
+        keywords.update(
+            { word: word },
+            { $inc: { count: 1 }},
+            { upsert: true },
+            function(err, result) {
+                deferred.resolve();
+            }
+        );
+
+        return deferred.promise;
     },
 
     /**
