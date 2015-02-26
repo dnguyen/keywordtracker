@@ -19,14 +19,11 @@ var DataStore = {
     },
 
     addHit: function(word, data) {
-        var self = this;
-        console.log('[ADDING HIT] \n\t' + data.from);
-        var hash = crypto.createHash('md5').update(data.from + word).digest('hex');
-        console.log('\thash: ' + hash);
-        var trackerHits = this.db.collection('trackerhits');
+        var self = this,
+            trackerHits = this.db.collection('trackerhits'),
+            hash = crypto.createHash('md5').update(data.from + word).digest('hex');
 
-        // Check if link has already been parsed previously, if not
-        // Add it to the database
+        // Check if link has already been parsed previously, if not add it to the database
         trackerHits.find({ hash: hash }).toArray(function (err, docs) {
             if (docs.length === 0) {
                 self.insertTrackerHit({
@@ -37,7 +34,7 @@ var DataStore = {
                     contents: data.title,
                     date:  data.date
                 }).then(function() {
-                    console.log('[INSERT DONE] ' + data.from + ' ' +  data.title);
+                    console.log('[INSERT DONE] ' + data.type + ' ' + data.from + ' ' +  data.title);
                 });
 
                 self.upsertKeyword(word).then(function() {

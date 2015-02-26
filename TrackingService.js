@@ -9,6 +9,15 @@ var TwitterSource = require('./TwitterSource');
 var TwitterUserTimelineSource = require('./TwitterUserTimelineSource.js');
 
 var TrackingService = function() {
+    var self = this;
+    this.sources = [];
+
+    _.each(config.sources.twitterTimelines, function(screenName) {
+        self.sources.push(new TwitterUserTimelineSource({screenName: screenName}));
+    });
+    _.each(config.sources.rssFeeds, function(feedUrl) {
+        self.sources.push(new RSSSource({feed: feedUrl, keywords: config.keywords }));
+    });
 
 };
 
@@ -27,16 +36,20 @@ TrackingService.prototype.start = function() {
     //     keywords: config.keywords
     // });
     var twitterSource = new TwitterSource();
-    var twitterUserSource = new TwitterUserTimelineSource({screenName: 'allkpop'});
-    //setInterval(function() {
+    //var twitterUserSource = new TwitterUserTimelineSource({screenName: 'allkpop'});
+    setInterval(function() {
+        _.each(this.sources, function(source) {
+            source.parse();
+        });
+        twitterSource.parse();
         console.log('\n\n[BEGIN PARSING]\n\n');
         DataStore.total = 0;
         // vergeSource.parse();
         // rssSource.parse();
-        twitterSource.parse();
+        //twitterSource.parse();
         //twitterUserSource.parse();
         DataStore.lastTotal = DataStore.total;
-    //}, 1000*60);
+    }, 1000*60);
 };
 
 module.exports = TrackingService;
