@@ -12,6 +12,9 @@ var Config = {
         ],
         rssFeeds: [
             // RSS feed URLs
+        ],
+        subreddits: [
+            // Subreddit names
         ]
     }
 };

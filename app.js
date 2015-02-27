@@ -18,7 +18,6 @@ MongoClient.connect(mongoUrl, function(err, db) {
         app.get('/', function(req, res) {
             return res.json({
                 relevance: DataStore.keywordRelevance,
-                lastTotal: DataStore.lastTotal,
                 total: DataStore.total
             });
         });

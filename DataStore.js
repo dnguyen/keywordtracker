@@ -3,9 +3,8 @@ var crypto = require('crypto'),
     $q = require('bluebird');
 
 var DataStore = {
-    // Keep track of counts in memory
+    // Keep track of each individual counts in memory
     keywordRelevance: {},
-    lastTotal: 0,
     total: 0,
 
     increment: function(word, amount) {
