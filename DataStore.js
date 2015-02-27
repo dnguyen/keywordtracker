@@ -33,11 +33,11 @@ var DataStore = {
                     contents: data.title,
                     date:  data.date
                 }).then(function() {
-                    console.log('[INSERT DONE] ' + data.type + ' ' + data.from + ' ' +  data.title);
+                    console.log('[INSERT DONE] ' + word + ' ' + data.type + ' ' + data.from);
                 });
 
                 self.upsertKeyword(word).then(function() {
-                    console.log('[UPSERT DONE] ' + word);
+                    console.log('[UPSERT DONE] ' + word + ' ' + data.type + ' ' + data.from);
                 });
 
             }

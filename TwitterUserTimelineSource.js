@@ -25,14 +25,12 @@ TwitterUserTimelineSource.prototype.parse = function() {
         _.each(data, function(tweet) {
             _.each(config.keywords, function(word) {
                 if (tweet.text.indexOf(word) > -1 || tweet.text.indexOf(word.toLowerCase()) > -1) {
-                    var created = moment(tweet.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY', 'en');
-                    console.log(tweet.text);
                     DataStore.increment(word, 1);
                     DataStore.addHit(word, {
                         from: tweet.id_str,
                         title: tweet.text,
                         type: 'tweet',
-                        date: created.toDate()
+                        date: moment(tweet.created_at, 'dd MMM DD HH:mm:ss ZZ YYYY', 'en').toDate()
                     });
                 }
             });

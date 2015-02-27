@@ -11,17 +11,23 @@ var SubRedditSource = function(options) {
 
 SubRedditSource.prototype.parse = function() {
     var self = this;
-    console.log('parsing subreddit');
 
     request('https://www.reddit.com/r/' + this.subreddit + '/new.json?sort=new', function(err, response, body) {
         if (!err && response.statusCode == 200) {
             var bodyObj = JSON.parse(body);
             _.each(bodyObj.data.children, function(post) {
                 var postData = post.data;
-                console.log(postData.title)
 
                 _.each(config.keywords, function(word) {
-
+                    if (postData.title.includes(word)) {
+                        DataStore.increment(word, 1);
+                        DataStore.addHit(word, {
+                            from: postData.permalink,
+                            title: postData.title,
+                            type: 'subreddit_post',
+                            date: moment(postData.created, 'X').toDate()
+                        });
+                    }
                 });
             });
         }

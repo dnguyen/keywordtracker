@@ -1,4 +1,5 @@
 var Config = {
+    checkTimeInterval: 1000 * 60,
     keywords: [],
     twitter: {
         consumerKey: '',
