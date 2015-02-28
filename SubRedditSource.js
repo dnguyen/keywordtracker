@@ -10,6 +10,7 @@ var SubRedditSource = function(options) {
 };
 
 SubRedditSource.prototype.parse = function() {
+    console.log('Searching subreddit ' + this.subreddit);
     var self = this;
 
     request('https://www.reddit.com/r/' + this.subreddit + '/new.json?sort=new', function(err, response, body) {

@@ -16,9 +16,32 @@ MongoClient.connect(mongoUrl, function(err, db) {
         var app = express();
 
         app.get('/', function(req, res) {
-            return res.json({
-                relevance: DataStore.keywordRelevance,
-                total: DataStore.total
+            var keywords = db.collection('keywords'),
+                trackerhits = db.collection('trackerhits');
+
+            keywords.aggregate([{
+                $group: {
+                    _id: null,
+                    total: {
+                        $sum: "$count"
+                    }
+                }
+            }], function(err, docs) {
+                var totalCount = docs[0].total;
+                console.log(totalCount);
+
+                keywords.find({ $query: { }, $orderby: { count: -1}}, { }, { limit: 6 }).toArray(function(err, docs) {
+                    if (!err) {
+                        var rtrObject = {
+                            keywords: docs,
+                            total: totalCount
+                        };
+
+                        return res.json(rtrObject);
+                    }
+
+                });
+
             });
         });
 

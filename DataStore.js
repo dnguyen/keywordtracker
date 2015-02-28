@@ -37,7 +37,7 @@ var DataStore = {
                 });
 
                 self.upsertKeyword(word).then(function() {
-                    console.log('[UPSERT DONE] ' + word + ' ' + data.type + ' ' + data.from);
+                    //console.log('[UPSERT DONE] ' + word + ' ' + data.type + ' ' + data.from);
                 });
 
             }
