@@ -27,20 +27,24 @@ MongoClient.connect(mongoUrl, function(err, db) {
                     }
                 }
             }], function(err, docs) {
-                var totalCount = docs[0].total;
-                console.log(totalCount);
+                if (docs.length > 0) {
+                    var totalCount = docs[0].total;
+                    console.log(totalCount);
 
-                keywords.find({ $query: { }, $orderby: { count: -1}}, { }, { limit: 6 }).toArray(function(err, docs) {
-                    if (!err) {
-                        var rtrObject = {
-                            keywords: docs,
-                            total: totalCount
-                        };
+                    keywords.find({ $query: { }, $orderby: { count: -1}}, { }, { limit: 6 }).toArray(function(err, docs) {
+                        if (!err) {
+                            var rtrObject = {
+                                keywords: docs,
+                                total: totalCount
+                            };
 
-                        return res.json(rtrObject);
-                    }
+                            return res.json(rtrObject);
+                        }
 
-                });
+                    });
+                } else {
+                    return res.json({ error: 'no docs' });
+                }
 
             });
         });
