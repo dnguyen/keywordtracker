@@ -5,7 +5,7 @@ var Config = {
         consumerKey: '',
         consumerSecret: '',
         accessToken: '',
-        access_token_secret: ''
+        accessTokenSecret: ''
     },
     sources: {
         twitterTimelines: [
