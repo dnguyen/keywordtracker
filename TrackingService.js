@@ -3,6 +3,7 @@ var _ = require('lodash'),
     RSSSource = require('./RSSSource.js'),
     TwitterSource = require('./TwitterSource'),
     TwitterUserTimelineSource = require('./TwitterUserTimelineSource.js'),
+    TwitterStreamSource = require('./TwitterStreamSource.js'),
     SubRedditSource = require('./SubRedditSource.js'),
     DataStore = require('./DataStore.js'),
     config = require('./config.js');
@@ -28,9 +29,10 @@ var TrackingService = function() {
 TrackingService.prototype.start = function() {
     console.log('Starting Tracking Service');
 
-    var twitterSource = new TwitterSource();
+    var twitterSource = new TwitterSource(),
+        twitterStream = new TwitterStreamSource();
     var self = this;
-
+    twitterStream.parse();
     setInterval(function() {
         console.log('\n\n[BEGIN PARSING]\n\n');
         DataStore.total = 0;
