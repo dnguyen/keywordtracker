@@ -20,7 +20,7 @@ SubRedditSource.prototype.parse = function() {
                 var postData = post.data;
 
                 _.each(config.keywords, function(word) {
-                    if (postData.title.text.indexOf(word) > -1) {
+                    if (postData.title.indexOf(word) > -1) {
                         DataStore.increment(word, 1);
                         DataStore.addHit(word, {
                             from: postData.permalink,
