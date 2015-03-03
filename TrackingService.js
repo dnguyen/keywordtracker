@@ -33,17 +33,17 @@ TrackingService.prototype.start = function() {
         twitterStream = new TwitterStreamSource();
     var self = this;
     twitterStream.parse();
-    setInterval(function() {
-        console.log('\n\n[BEGIN PARSING]\n\n');
-        DataStore.total = 0;
+    // setInterval(function() {
+    //     console.log('\n\n[BEGIN PARSING]\n\n');
+    //     DataStore.total = 0;
 
-        _.each(self.sources, function(source) {
-            source.parse();
-        });
+    //     _.each(self.sources, function(source) {
+    //         source.parse();
+    //     });
 
-        twitterSource.parse();
+    //     twitterSource.parse();
 
-    }, config.checkTimeInterval);
+    // }, config.checkTimeInterval);
 };
 
 module.exports = TrackingService;

@@ -1,6 +1,7 @@
 
 var crypto = require('crypto'),
-    $q = require('bluebird');
+    $q = require('bluebird'),
+    emitter = require('./Emitter.js');
 
 var DataStore = {
     // Keep track of each individual counts in memory
@@ -25,15 +26,18 @@ var DataStore = {
         // Check if link has already been parsed previously, if not add it to the database
         trackerHits.find({ hash: hash }).toArray(function (err, docs) {
             if (docs.length === 0) {
-                self.insertTrackerHit({
+                var insertObj = {
                     hash: hash,
                     word: word,
                     type: data.type,
                     from: data.from,
                     contents: data.title,
                     date:  data.date
-                }).then(function() {
+                };
+
+                self.insertTrackerHit(insertObj).then(function() {
                     console.log('[INSERT DONE] ' + word + ' ' + data.type + ' ' + data.from);
+                    emitter.emit('trackhit', insertObj)
                 });
 
                 self.upsertKeyword(word).then(function() {

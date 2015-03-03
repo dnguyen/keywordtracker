@@ -1,5 +1,6 @@
-var express = require('express'),
-    request = require('request');
+var app = require('express')(),
+    request = require('request'),
+    IOServer = require('./IOServer.js');
 var TrackingService = require('./TrackingService.js');
 var DataStore = require('./DataStore.js');
 
@@ -13,7 +14,15 @@ MongoClient.connect(mongoUrl, function(err, db) {
         var trackingService = new TrackingService();
         trackingService.start();
 
-        var app = express();
+        var server = require('http').Server(app);
+        var ioServer = new IOServer({ server: server });
+
+        server.listen(3000, function() {
+            var host = server.address().address;
+            var port = server.address().port;
+
+            console.log('App listening at http://%s:%s', host, port);
+        });
 
         app.get('/', function(req, res) {
             var keywords = db.collection('keywords'),
@@ -47,13 +56,6 @@ MongoClient.connect(mongoUrl, function(err, db) {
                 }
 
             });
-        });
-
-        var server = app.listen(3000, function() {
-            var host = server.address().address;
-            var port = server.address().port;
-
-            console.log('App listening at http://%s:%s', host, port);
         });
 
     }
