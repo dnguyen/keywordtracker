@@ -37,7 +37,7 @@ var DataStore = {
 
                 self.insertTrackerHit(insertObj).then(function() {
                     console.log('[INSERT DONE] ' + word + ' ' + data.type + ' ' + data.from);
-                    emitter.emit('trackhit', insertObj)
+                    emitter.emit('mentioned', insertObj)
                 });
 
                 self.upsertKeyword(word).then(function() {

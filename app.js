@@ -1,21 +1,21 @@
 var app = require('express')(),
     request = require('request'),
-    IOServer = require('./IOServer.js');
-var TrackingService = require('./TrackingService.js');
-var DataStore = require('./DataStore.js');
-
-var MongoClient = require('mongodb').MongoClient;
-var mongoUrl = 'mongodb://localhost:27017/keyword_tracker';
+    IOServer = require('./IOServer.js'),
+    TrackingService = require('./TrackingService.js'),
+    DataStore = require('./DataStore.js'),
+    MongoClient = require('mongodb').MongoClient,
+    mongoUrl = 'mongodb://localhost:27017/keyword_tracker';
 
 MongoClient.connect(mongoUrl, function(err, db) {
     if (!err) {
         console.log('Connected to mongo server');
         DataStore.db = db;
-        var trackingService = new TrackingService();
-        trackingService.start();
 
-        var server = require('http').Server(app);
-        var ioServer = new IOServer({ server: server });
+        var server = require('http').Server(app),
+            ioServer = new IOServer({ server: server }),
+            trackingService = new TrackingService();
+
+        trackingService.start();
 
         server.listen(3000, function() {
             var host = server.address().address;
@@ -25,8 +25,7 @@ MongoClient.connect(mongoUrl, function(err, db) {
         });
 
         app.get('/', function(req, res) {
-            var keywords = db.collection('keywords'),
-                trackerhits = db.collection('trackerhits');
+            var keywords = db.collection('keywords');
 
             keywords.aggregate([{
                 $group: {

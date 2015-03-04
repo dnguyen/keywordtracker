@@ -7,7 +7,7 @@ var IOServer = function(options) {
     this.io = socketio(options.server);
     this.io.on('connection', function(socket){
         console.log('socket io connection recieved');
-        emitter.on('trackhit', function(data) {
+        emitter.on('mentioned', function(data) {
             self.newTrackHit(socket, data)
         });
     });
@@ -18,8 +18,7 @@ var IOServer = function(options) {
  * @return {[type]} [description]
  */
 IOServer.prototype.newTrackHit = function(socket, data) {
-    console.log('newTrackHit event');
-    socket.emit('trackhit', data);
+    socket.emit('mentioned', data);
 };
 
 module.exports = IOServer;
