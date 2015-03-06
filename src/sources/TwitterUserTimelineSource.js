@@ -2,8 +2,8 @@
 var Twit = require('twit'),
     moment = require('moment'),
     _ = require('lodash'),
-    config = require('./config.js');
-    DataStore = require('./DataStore.js');
+    config = require('../config.js');
+    DataStore = require('../DataStore.js');
 
 var TwitterUserTimelineSource = function(options) {
     this.twit = new Twit({

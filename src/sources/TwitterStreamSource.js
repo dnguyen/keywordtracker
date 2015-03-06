@@ -2,8 +2,8 @@
 var Twit = require('twit'),
     _ = require('lodash'),
     moment = require('moment'),
-    config = require('./config.js'),
-    DataStore = require('./DataStore.js');
+    config = require('../config.js'),
+    DataStore = require('../DataStore.js');
 
 var TwitterStreamSource = function(options) {
     this.twit = new Twit({

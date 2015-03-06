@@ -1,9 +1,8 @@
 var request = require('request'),
     FeedParser = require('feedparser'),
     moment = require('moment'),
-    _ = require('lodash');
-
-var DataStore = require('./DataStore.js');
+    _ = require('lodash'),
+    DataStore = require('../DataStore.js');
 
 var RSSSource = function(options) {
     if (!options.feed) console.log('Invalid feed');

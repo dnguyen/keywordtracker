@@ -2,8 +2,8 @@
 var request = require('request'),
     _ = require('lodash'),
     moment = require('moment'),
-    config = require('./config'),
-    DataStore = require('./DataStore');
+    config = require('../config'),
+    DataStore = require('../DataStore');
 
 var SubRedditSource = function(options) {
     this.subreddit = options.subreddit;

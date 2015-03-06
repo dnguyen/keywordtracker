@@ -1,10 +1,10 @@
 
 var _ = require('lodash'),
-    RSSSource = require('./RSSSource.js'),
-    TwitterSource = require('./TwitterSource'),
-    TwitterUserTimelineSource = require('./TwitterUserTimelineSource.js'),
-    TwitterStreamSource = require('./TwitterStreamSource.js'),
-    SubRedditSource = require('./SubRedditSource.js'),
+    RSSSource = require('./sources/RSSSource.js'),
+    TwitterSource = require('./sources/TwitterSource'),
+    TwitterUserTimelineSource = require('./sources/TwitterUserTimelineSource.js'),
+    TwitterStreamSource = require('./sources/TwitterStreamSource.js'),
+    SubRedditSource = require('./sources/SubRedditSource.js'),
     DataStore = require('./DataStore.js'),
     config = require('./config.js');
 

@@ -8,16 +8,16 @@ var IOServer = function(options) {
     this.io.on('connection', function(socket){
         console.log('socket io connection recieved');
         emitter.on('mentioned', function(data) {
-            self.newTrackHit(socket, data)
+            self.handleNewMention(socket, data)
         });
     });
 };
 
 /**
- *
+ * Emit mentioned socket event that includes the mention data.
  * @return {[type]} [description]
  */
-IOServer.prototype.newTrackHit = function(socket, data) {
+IOServer.prototype.handleNewMention = function(socket, data) {
     socket.emit('mentioned', data);
 };
 
