@@ -1,18 +1,24 @@
 var app = require('express')(),
     request = require('request'),
+    mongoose = require('mongoose'),
+    config = require('./config'),
     IOServer = require('./IOServer.js'),
     TrackingService = require('./TrackingService.js'),
-    DataStore = require('./DataStore.js'),
-    MongoClient = require('mongodb').MongoClient,
-    mongoUrl = 'mongodb://localhost:27017/keyword_tracker';
+    models = require('./models');
 
-MongoClient.connect(mongoUrl, function(err, db) {
-    if (!err) {
-        console.log('Connected to mongo server');
-        DataStore.db = db;
-        start();
-    }
+mongoose.connect(config.mongo.connection);
+mongoose.connection.on('connected', function() {
+
+    models.init();
+
+    models.Keyword.find({}, function(err, docs) {
+        console.log(docs);
+    });
+
+    start();
+
 });
+
 
 function start() {
 
@@ -20,7 +26,7 @@ function start() {
         ioServer = new IOServer({ server: server }),
         trackingService = new TrackingService();
 
-    trackingService.start();
+    //trackingService.start();
 
     server.listen(3000, function() {
         var host = server.address().address;
@@ -30,35 +36,6 @@ function start() {
     });
 
     app.get('/', function(req, res) {
-        var keywords = db.collection('keywords');
-
-        keywords.aggregate([{
-            $group: {
-                _id: null,
-                total: {
-                    $sum: "$count"
-                }
-            }
-        }], function(err, docs) {
-            if (docs.length > 0) {
-                var totalCount = docs[0].total;
-                console.log(totalCount);
-
-                keywords.find({ $query: { }, $orderby: { count: -1}}, { }, { limit: 6 }).toArray(function(err, docs) {
-                    if (!err) {
-                        var rtrObject = {
-                            keywords: docs,
-                            total: totalCount
-                        };
-
-                        return res.json(rtrObject);
-                    }
-
-                });
-            } else {
-                return res.json({ error: 'no docs' });
-            }
-
-        });
+        return res.json({});
     });
 }

@@ -1,4 +1,7 @@
 var Config = {
+    mongo: {
+        connection: 'mongodb://localhost:27017/keyword_tracker'
+    },
     checkTimeInterval: 1000 * 60,
     keywords: [],
     twitter: {
