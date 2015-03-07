@@ -6,7 +6,6 @@ var keywordSchema = new mongoose.Schema({
     count: Number
 }, { collection: 'keywords' });
 
-
 module.exports = {
     Keyword: mongoose.model('Keyword', keywordSchema)
 };

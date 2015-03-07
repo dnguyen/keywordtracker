@@ -10,11 +10,6 @@ mongoose.connect(config.mongo.connection);
 mongoose.connection.on('connected', function() {
 
     models.init();
-
-    models.Keyword.find({}, function(err, docs) {
-        console.log(docs);
-    });
-
     start();
 
 });
@@ -36,6 +31,9 @@ function start() {
     });
 
     app.get('/', function(req, res) {
-        return res.json({});
+
+        models.Keyword.find({}, function(err, docs) {
+            return res.json(docs);
+        });
     });
 }
